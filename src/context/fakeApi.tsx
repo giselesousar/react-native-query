@@ -25,14 +25,14 @@ const FakeApiProvider: FC<{children: ReactNode}> = ({children}) => {
     return new Promise((resolve: any) => setTimeout(resolve, duration));
   }
 
-  const getPosts: () => Promise<Post[]> = () => {
+  const getPosts: () => Promise<Post[]> = async () => {
     return wait(DURATION).then(async () => {
       const jsonValue = await AsyncStorage.getItem('@posts');
       return jsonValue != null ? JSON.parse(jsonValue) : null;
     });
   };
 
-  const getPost: (postId: number) => Promise<Post | undefined> = (
+  const getPost: (postId: number) => Promise<Post | undefined> = async (
     postId: number,
   ) => {
     return wait(DURATION).then(async () => {
@@ -42,7 +42,7 @@ const FakeApiProvider: FC<{children: ReactNode}> = ({children}) => {
     });
   };
 
-  const addPost: (post: Post) => void = (post: Post) => {
+  const addPost: (post: Post) => void = async (post: Post) => {
     return wait(DURATION).then(async () => {
       const posts = (await getPosts()) || [];
       const id = (posts.slice(-1)[0].id || 0) + 1;
@@ -53,7 +53,7 @@ const FakeApiProvider: FC<{children: ReactNode}> = ({children}) => {
     });
   };
 
-  const deletePost: (postId: number) => void = (postId: number) => {
+  const deletePost: (postId: number) => void = async (postId: number) => {
     return wait(DURATION).then(async () => {
       const posts = await getPosts();
       await AsyncStorage.setItem(
